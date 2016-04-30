@@ -1,8 +1,8 @@
-package me.gmur.bingImageDownloader;
+package me.gmur.bingImageDownloader.util;
 
 import java.awt.*;
 
-public class Display {
+public abstract class Display {
     static final GraphicsDevice graphicsDevice = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 
     public static int getDisplayWidth() {

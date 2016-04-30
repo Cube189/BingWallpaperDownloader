@@ -1,14 +1,16 @@
 package me.gmur.bingImageDownloader;
 
+import me.gmur.bingImageDownloader.Impl.ImageDownloaderImpl;
+
 public class Main {
 
 
-    private static String savedImageFilename = "bingimage.json";
+    private static String savedImageFilename = "bingimage.jpg";
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
 
-        ImageDownloader imageDownloader = new ImageDownloader();
-        imageDownloader.getImageAddress();
+        ImageDownloaderImpl imageDownloader = new ImageDownloaderImpl();
+        imageDownloader.downloadImage();
 
     }
 
