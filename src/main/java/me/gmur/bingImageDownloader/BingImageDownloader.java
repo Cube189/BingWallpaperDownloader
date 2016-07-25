@@ -1,10 +1,11 @@
-package me.gmur.bingImageDownloader.Impl;
+package me.gmur.bingImageDownloader;
 
-import me.gmur.bingImageDownloader.ImageDownloader;
 import me.gmur.bingImageDownloader.util.Display;
 import org.json.JSONObject;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -12,11 +13,13 @@ import static me.gmur.bingImageDownloader.util.Flags.DEBUG_IGNORE_DISPLAY_RESOLU
 
 //TODO: Development imports. To be removed!
 
-public class ImageDownloaderImpl implements ImageDownloader {
+public class BingImageDownloader implements ImageDownloader {
     private final String imageJsonUrlBase = "http://www.bing.com/HPImageArchive.aspx?format=js&n=1";    // n specifies the number of img's
     private String jsonUrlDaysAgo = "0";   // up to 20
     private String jsonUrlRegion = "en-US";
     private URL jsonUrl;
+
+    private String filename = "bingimage.jpg";
 
 
     private String getImageAddress() {
@@ -45,7 +48,7 @@ public class ImageDownloaderImpl implements ImageDownloader {
         try {
             bufferedReader = new BufferedReader(new InputStreamReader(_url.openStream()));
 
-            String line = "";
+            String line;
 
             while ((line = bufferedReader.readLine()) != null) {
                 sb.append(line);
@@ -58,38 +61,18 @@ public class ImageDownloaderImpl implements ImageDownloader {
         return sb.toString();
     }
 
-    private void readFile(final URL _url) {
-        try {
-            System.out.println("Reading image");
 
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(_url.openStream()));
-
-            String line = "";
-
-            while ((line = bufferedReader.readLine()) != null) {
-                System.out.println(line);
-            }
-            bufferedReader.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void writeTo(final String _filename) throws IOException {
-        FileWriter fileWriter = new FileWriter(_filename);
-        BufferedWriter output = new BufferedWriter(fileWriter);
-
-    }
-
-    public final void downloadImage() {       // TODO: Singleton pattern impl?
+    public final void downloadImage() {
         URL imageAddress;
+        ImageSaver imageSaver;
         try {
             imageAddress = new URL(getImageAddress());
-            readFile(imageAddress);
+
+            imageSaver = new ImageSaverImpl(imageAddress, filename);
+
+            imageSaver.saveImage();
+
         } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
             e.printStackTrace();
         }
 

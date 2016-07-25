@@ -1,7 +1,5 @@
 package me.gmur.bingImageDownloader;
 
-import me.gmur.bingImageDownloader.Impl.ImageDownloaderImpl;
-
 public class Main {
 
 
@@ -9,7 +7,7 @@ public class Main {
 
     public static void main(final String[] args) {
 
-        ImageDownloaderImpl imageDownloader = new ImageDownloaderImpl();
+        BingImageDownloader imageDownloader = new BingImageDownloader();
         imageDownloader.downloadImage();
 
     }
