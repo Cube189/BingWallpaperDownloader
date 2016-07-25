@@ -38,6 +38,7 @@ public class BingImageDownloader implements ImageDownloader {
         final String imageUrl = "http://www.bing.com" + jsonImagesObject.getString("urlbase")
                 + "_" + (DEBUG_IGNORE_DISPLAY_RESOLUTION ? "1920x1080" : Display.getDisplayWidth() + "x" + Display.getDisplayHeight())
                 + ".jpg";
+        System.out.println(imageUrl);
 
         return imageUrl;
     }
@@ -67,7 +68,6 @@ public class BingImageDownloader implements ImageDownloader {
         ImageSaver imageSaver;
         try {
             imageAddress = new URL(getImageAddress());
-
             imageSaver = new ImageSaverImpl(imageAddress, filename);
 
             imageSaver.saveImage();

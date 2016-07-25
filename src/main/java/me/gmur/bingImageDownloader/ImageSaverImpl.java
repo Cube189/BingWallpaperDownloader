@@ -7,7 +7,7 @@ public class ImageSaverImpl implements ImageSaver {
     private URL imageURL;
     private String filename;
 
-    private String imageContents;
+    private byte[] imageContents;
 
     public ImageSaverImpl(URL _url, String _filename) {
         this.imageURL = _url;
@@ -15,33 +15,46 @@ public class ImageSaverImpl implements ImageSaver {
     }
 
     public void saveImage() {
-        streamFile(imageURL);
-        writeFile(filename);
+        streamImageFrom(imageURL);
+        writeImageTo(filename);
     }
 
-    private void streamFile(final URL _url) {
+    private void streamImageFrom(final URL _url) {
+        InputStream input;
+        ByteArrayOutputStream output;
+
+        byte[] buffer = new byte[1024];
+
         try {
-            System.out.println("Reading image");
+            System.out.println("Reading image...");
 
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(_url.openStream()));
+            input = new BufferedInputStream(_url.openStream());
+            output = new ByteArrayOutputStream();
 
-            String line;
-
-            while ((line = bufferedReader.readLine()) != null) {
-                imageContents += line;
+            int n;
+            while (-1 != (n = input.read(buffer))) {
+                output.write(buffer, 0, n);
             }
-            bufferedReader.close();
+
+            output.close();
+            input.close();
+
+            imageContents = output.toByteArray();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void writeFile(final String _filename) {
-        Writer writer;
-        try {
-            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(_filename), "utf-8"));
+    private void writeImageTo(final String _filename) {
+        FileOutputStream writer;
 
+        try {
+            System.out.println("Writing to file...");
+
+            writer = new FileOutputStream(_filename);
             writer.write(imageContents);
+
+            writer.close();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (FileNotFoundException e) {
