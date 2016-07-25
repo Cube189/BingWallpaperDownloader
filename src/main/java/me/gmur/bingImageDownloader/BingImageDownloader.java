@@ -15,8 +15,8 @@ import static me.gmur.bingImageDownloader.util.Flags.DEBUG_IGNORE_DISPLAY_RESOLU
 
 public class BingImageDownloader implements ImageDownloader {
     private final String imageJsonUrlBase = "http://www.bing.com/HPImageArchive.aspx?format=js&n=1";    // n specifies the number of img's
-    private String jsonUrlDaysAgo = "0";   // up to 20
-    private String jsonUrlRegion = "en-US";
+    private final String jsonUrlDaysAgo = "0";   // up to 20
+    private final String jsonUrlRegion = "en-US";
     private URL jsonUrl;
 
     private String filename = "bingimage.jpg";

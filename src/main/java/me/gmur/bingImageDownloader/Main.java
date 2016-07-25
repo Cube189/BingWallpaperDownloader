@@ -10,6 +10,7 @@ public class Main {
         BingImageDownloader imageDownloader = new BingImageDownloader();
         imageDownloader.downloadImage();
 
+        WallpaperSetter.setWallpaper();
     }
 
 
