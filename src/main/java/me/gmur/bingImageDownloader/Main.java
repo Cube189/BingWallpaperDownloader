@@ -1,16 +1,11 @@
 package me.gmur.bingImageDownloader;
 
+import java.io.File;
+
 public class Main {
+    public static void main(String[] args) {
+        File image = new BingImageDownloader().getImage();
 
-
-    private static String savedImageFilename = "bingimage.jpg";
-
-    public static void main(final String[] args) {
-
-        BingImageDownloader imageDownloader = new BingImageDownloader();
-        imageDownloader.downloadImage();
-
+        WallpaperSetter.setWallpaperAs(image);
     }
-
-
 }
