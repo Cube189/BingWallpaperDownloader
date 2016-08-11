@@ -4,7 +4,8 @@ import java.io.File;
 
 /**
  * Downloads image from the specified source.
- * Different objects implementing the interface can downlad images from different sources.
+ * <p>
+ * Different objects implementing the interface can download images from different sources.
  */
 public interface ImageDownloader {
     /**

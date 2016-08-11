@@ -5,18 +5,19 @@ import com.sun.istack.internal.NotNull;
 import java.io.*;
 import java.net.URL;
 
-public class BingImageDownloader implements ImageDownloader {
+public final class BingImageDownloader implements ImageDownloader {
     private final String imagePath = "bingimage.jpg";
 
     private BingImageDownloader() {
     }
 
+    // TODO: Implement external properties file support
     public static BingImageDownloader createWithProperties() {
         return new BingImageDownloader();
     }
 
     public File getImage() {
-        URL imageAddress = new JsonParser().getImageAddress();
+        URL imageAddress = new BingJsonProcessor().getImageAddress();
         byte[] imageData = fetchImageDataFrom(imageAddress);
 
         ImageSaver.saveImageDataTo(imageData, imagePath);
@@ -24,7 +25,7 @@ public class BingImageDownloader implements ImageDownloader {
         return new File(imagePath);
     }
 
-    private byte[] fetchImageDataFrom(@NotNull URL _imageAddress) {
+    private byte[] fetchImageDataFrom(@NotNull final URL _imageAddress) {
         byte[] imageContents = null;
 
         InputStream input;

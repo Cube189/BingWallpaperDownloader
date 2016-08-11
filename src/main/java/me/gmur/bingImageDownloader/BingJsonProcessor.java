@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-class JsonParser {
+class BingJsonProcessor implements JsonProcessor {
     public URL getImageAddress() {
         URL jsonAddress = getJsonAddress();
         JSONObject jsonData = getJsonData(jsonAddress);
@@ -19,12 +19,13 @@ class JsonParser {
     }
 
 
-    private URL retrieveImageAddressFrom(@NotNull JSONObject _jsonData) {
+    private URL retrieveImageAddressFrom(@NotNull final JSONObject _jsonData) {
+        final String bingUrl = "http://www.bing.com";
         URL imageAddress = null;
 
         try {
             JSONObject arrayOfImages = _jsonData.getJSONArray("images").getJSONObject(0);
-            String urlbase = "http://www.bing.com" + arrayOfImages.getString("urlbase");
+            String urlbase = bingUrl + arrayOfImages.getString("urlbase");
 
             imageAddress = new URL(urlbase + "_" + "1920x1080" + ".jpg");
         } catch (MalformedURLException e) {
@@ -34,7 +35,7 @@ class JsonParser {
         return imageAddress;
     }
 
-    private JSONObject getJsonData(@NotNull URL _jsonAddress) {
+    private JSONObject getJsonData(@NotNull final URL _jsonAddress) {
         BufferedReader bufferedReader;
         StringBuilder jsonData = new StringBuilder();
 
@@ -54,10 +55,11 @@ class JsonParser {
     }
 
     private URL getJsonAddress() {
+        final String baseUrl = "http://www.bing.com/HPImageArchive.aspx?format=js&n=1";
         URL jsonUrl = null;
 
         try {
-            jsonUrl = new URL("http://www.bing.com/HPImageArchive.aspx?format=js&n=1"
+            jsonUrl = new URL(baseUrl
                     + "&idx=" + "0"
                     + "&mkt=" + "en-US"
             );
