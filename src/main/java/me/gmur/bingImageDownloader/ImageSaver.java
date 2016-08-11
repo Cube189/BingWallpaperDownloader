@@ -5,7 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
-public class ImageSaver {
+class ImageSaver {
     public static void saveImageDataTo(byte[] _imageContents, String _filename) {
         FileOutputStream writer;
 

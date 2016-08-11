@@ -5,8 +5,15 @@ import com.sun.istack.internal.NotNull;
 import java.io.*;
 import java.net.URL;
 
-public class BingImageDownloader {
+public class BingImageDownloader implements ImageDownloader {
     private final String imagePath = "bingimage.jpg";
+
+    private BingImageDownloader() {
+    }
+
+    public static BingImageDownloader createWithProperties() {
+        return new BingImageDownloader();
+    }
 
     public File getImage() {
         URL imageAddress = new JsonParser().getImageAddress();

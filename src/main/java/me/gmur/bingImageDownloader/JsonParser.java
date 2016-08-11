@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class JsonParser {
+class JsonParser {
     public URL getImageAddress() {
         URL jsonAddress = getJsonAddress();
         JSONObject jsonData = getJsonData(jsonAddress);
