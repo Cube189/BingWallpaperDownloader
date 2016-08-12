@@ -7,25 +7,26 @@ import java.net.URL;
 
 public final class BingImageDownloader implements ImageDownloader {
     private final String imagePath = "bingimage.jpg";
+    private URL imageAddress;
 
     private BingImageDownloader() {
     }
 
     // TODO: Implement external properties file support
-    public static BingImageDownloader createWithProperties() {
+    public static BingImageDownloader createInstance() {
         return new BingImageDownloader();
     }
 
     public File getImage() {
-        URL imageAddress = new BingJsonProcessor().getImageAddress();
-        byte[] imageData = fetchImageDataFrom(imageAddress);
+        imageAddress = new BingJsonProcessor().getImageAddress();
+        byte[] imageData = fetchImageData();
 
         ImageSaver.saveImageDataTo(imageData, imagePath);
 
         return new File(imagePath);
     }
 
-    private byte[] fetchImageDataFrom(@NotNull final URL _imageAddress) {
+    private byte[] fetchImageData() {
         byte[] imageContents = null;
 
         InputStream input;
@@ -33,9 +34,9 @@ public final class BingImageDownloader implements ImageDownloader {
         byte[] buffer = new byte[1024];
 
         try {
-            System.err.println("INFO: Getting image data from \'" + _imageAddress.toString() + "\'...");
+            System.err.println("INFO: Getting image data from \'" + imageAddress.toString() + "\'...");
 
-            input = new BufferedInputStream(_imageAddress.openStream());
+            input = new BufferedInputStream(imageAddress.openStream());
             output = new ByteArrayOutputStream();
 
             int n;

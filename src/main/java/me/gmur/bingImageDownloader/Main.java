@@ -4,9 +4,9 @@ import java.io.File;
 
 public class Main {
     public static void main(final String[] args) {
-        ImageDownloader imageDownloader = BingImageDownloader.createWithProperties();
+        ImageDownloader imageDownloader = BingImageDownloader.createInstance();
         File image = imageDownloader.getImage();
 
-        WallpaperSetter.setTo(image);
+        WallpaperSetter.getInstance().setTo(image);
     }
 }

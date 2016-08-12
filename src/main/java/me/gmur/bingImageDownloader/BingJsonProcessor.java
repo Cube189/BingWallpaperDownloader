@@ -11,9 +11,9 @@ import java.net.URL;
 
 class BingJsonProcessor implements JsonProcessor {
     public URL getImageAddress() {
-        URL jsonAddress = getJsonAddress();
-        JSONObject jsonData = getJsonData(jsonAddress);
-        URL imageAddress = retrieveImageAddressFrom(jsonData);
+        final URL jsonAddress = getJsonAddress();
+        final JSONObject jsonData = getJsonData(jsonAddress);
+        final URL imageAddress = retrieveImageAddressFrom(jsonData);
 
         return imageAddress;
     }
