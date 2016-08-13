@@ -19,6 +19,8 @@ final class OsChecker {
     public OsType determineOsType() {
         osName = System.getProperty("os.name");
 
+        System.out.println("INFO: OS running recognized as " + osName);
+
         if (isWindows()) {
             return OsType.WINDOWS;
         } else if (isMac()) {
