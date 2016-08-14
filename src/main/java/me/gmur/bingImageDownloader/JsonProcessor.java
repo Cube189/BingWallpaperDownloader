@@ -8,6 +8,7 @@ import java.net.URL;
 public interface JsonProcessor {
     /**
      * Returns a URL object with URL pointing to the image to be downloaded.
+     *
      * @return URL to the image to be downloaded.
      */
     URL getImageAddress();

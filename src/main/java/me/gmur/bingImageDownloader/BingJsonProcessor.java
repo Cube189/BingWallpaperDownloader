@@ -9,7 +9,18 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+/**
+ * <code>BingJsonProcessor</code> is responsible for parsing a JSON file
+ * in order to get the URL address for the current Bing Image of The Day.
+ *
+ * @see JsonProcessor
+ */
 class BingJsonProcessor implements JsonProcessor {
+    /**
+     * Returns a URL to the image.
+     *
+     * @return The image's address.
+     */
     public URL getImageAddress() {
         final URL jsonAddress = getJsonAddress();
         final JSONObject jsonData = getJsonData(jsonAddress);
@@ -18,7 +29,13 @@ class BingJsonProcessor implements JsonProcessor {
         return imageAddress;
     }
 
-
+    /**
+     * Parses the JSON file's contents looking
+     * for the key which holds the image's address.
+     *
+     * @param _jsonData Contains the JSON file's data.
+     * @return The image's URL address.
+     */
     private URL retrieveImageAddressFrom(@NotNull final JSONObject _jsonData) {
         final String bingUrl = "http://www.bing.com";
         URL imageAddress = null;
@@ -35,12 +52,18 @@ class BingJsonProcessor implements JsonProcessor {
         return imageAddress;
     }
 
+    /**
+     * Attempts to download the JSON data from bing.com servers.
+     *
+     * @param _jsonAddress Contains JSON file's URL address.
+     * @return JSON file's data.
+     */
     private JSONObject getJsonData(@NotNull final URL _jsonAddress) {
         BufferedReader bufferedReader;
         StringBuilder jsonData = new StringBuilder();
 
         try {
-            bufferedReader = new BufferedReader(new InputStreamReader(_jsonAddress.openStream()));
+            bufferedReader = new BufferedReader(new InputStreamReader(_jsonAddress.openStream(), "utf-8"));
 
             String line;
             while ((line = bufferedReader.readLine()) != null) {
@@ -54,6 +77,11 @@ class BingJsonProcessor implements JsonProcessor {
         return new JSONObject(jsonData.toString());
     }
 
+    /**
+     * Composes a URL address pointing to the JSON file.
+     *
+     * @return URL address to the JSON file.
+     */
     private URL getJsonAddress() {
         final String baseUrl = "http://www.bing.com/HPImageArchive.aspx?format=js&n=1";
         URL jsonUrl = null;
