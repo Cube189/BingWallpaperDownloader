@@ -12,6 +12,7 @@ import java.io.IOException;
 public class WallpaperSetter {
     private static WallpaperSetter instance = new WallpaperSetter();
     private File wallpaperImage;
+    private String[] script;
 
     private WallpaperSetter() {
     }
@@ -38,6 +39,7 @@ public class WallpaperSetter {
 
         System.out.println("INFO: Setting \'" + wallpaperImage.toString() + "\' as wallpaper...");
         chooseWallpaperSettingLogic();
+        setWallpaper();
     }
 
     /**
@@ -50,11 +52,23 @@ public class WallpaperSetter {
         OsType osType = OsChecker.getInstance().determineOsType();
 
         if (osType == OsType.WINDOWS) {
-            setWallpaperWindows();
+            wallpaperSettingLogicForWindows();
         } else if (osType == OsType.OSX) {
-            setWallpaperMac();
+            wallpaperSettingLogicForMac();
         } else {
-            setWallpaperLinux();
+            wallpaperSettingLogicForLinux();
+        }
+    }
+
+    /**
+     * Executes the logic chosen by
+     * <code>{@link WallpaperSetter#chooseWallpaperSettingLogic()}</code>
+     */
+    private void setWallpaper() {
+        try {
+            Runtime.getRuntime().exec(script);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -62,33 +76,27 @@ public class WallpaperSetter {
      * Applies logic needed to set a wallpaper image
      * if the OS appears to be Windows.
      */
-    private void setWallpaperWindows() {
-        // TODO: do Windows code
-        try {
-            Runtime.getRuntime().exec("");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void wallpaperSettingLogicForWindows() {
+        // According to http://www.windows-commandline.com/change-windows-wallpaper-command-line/
+        script = new String[]{
+                "reg",
+                "add \"HKEY_CURRENT_USER\\Control Panel\\Desktop\" /v Wallpaper /t REG_SZ /d" + wallpaperImage.getAbsolutePath() + "/f",
+                "RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters"
+        };
     }
 
     /**
      * Applies logic needed to set a desktop background image
      * if the OS appears to be OS X/macOS.
      */
-    private void setWallpaperMac() {
-        // TODO: Do Mac code
-        try {
-            String[] script = {
-                    "osascript",
-                    "-e", "tell application \"Finder\"",
-                    "-e", "set desktop picture to POSIX file \"" + wallpaperImage.getAbsolutePath() + "\"",
-                    "-e", "end tell"
-            };
-            Runtime runtime = Runtime.getRuntime();
-            runtime.exec(script);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void wallpaperSettingLogicForMac() {
+        // According to http://stackoverflow.com/a/22278487
+        script = new String[]{
+                "osascript",
+                "-e", "tell application \"Finder\"",
+                "-e", "set desktop picture to POSIX file \"" + wallpaperImage.getAbsolutePath() + "\"",
+                "-e", "end tell"
+        };
     }
 
     /**
@@ -96,12 +104,12 @@ public class WallpaperSetter {
      * if the OS appears to be other than Windows or OS X/macOS
      * (possibly a Linux distro).
      */
-    private void setWallpaperLinux() {
-        // TODO: Do Linux code
-        try {
-            Runtime.getRuntime().exec("");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void wallpaperSettingLogicForLinux() {
+        // According to http://askubuntu.com/a/69500
+        // This method currently works only on GNOME-based desktop environments
+        script = new String[]{
+                "gsettings",
+                "set org.gnome.desktop.background picture-uri file://" + wallpaperImage.getAbsolutePath()
+        };
     }
 }
