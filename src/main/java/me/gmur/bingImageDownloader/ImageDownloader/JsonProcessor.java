@@ -1,4 +1,4 @@
-package me.gmur.bingImageDownloader;
+package me.gmur.bingImageDownloader.imageDownloader;
 
 import java.net.URL;
 

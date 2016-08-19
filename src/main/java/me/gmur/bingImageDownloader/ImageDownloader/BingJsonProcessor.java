@@ -1,6 +1,5 @@
-package me.gmur.bingImageDownloader;
+package me.gmur.bingImageDownloader.imageDownloader;
 
-import com.sun.istack.internal.NotNull;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -16,32 +15,25 @@ import java.net.URL;
  * @see JsonProcessor
  */
 class BingJsonProcessor implements JsonProcessor {
+    private JSONObject jsonData;
+
+
+    public BingJsonProcessor() {
+        jsonData = getJsonData();
+    }
+
+
     /**
      * Returns a URL to the image.
      *
      * @return The image's address.
      */
     public URL getImageAddress() {
-        final URL jsonAddress = getJsonAddress();
-        final JSONObject jsonData = getJsonData(jsonAddress);
-        final URL imageAddress = retrieveImageAddressFrom(jsonData);
-
-        return imageAddress;
-    }
-
-    /**
-     * Parses the JSON file's contents looking
-     * for the key which holds the image's address.
-     *
-     * @param _jsonData Contains the JSON file's data.
-     * @return The image's URL address.
-     */
-    private URL retrieveImageAddressFrom(@NotNull final JSONObject _jsonData) {
         final String bingUrl = "http://www.bing.com";
         URL imageAddress = null;
 
         try {
-            JSONObject arrayOfImages = _jsonData.getJSONArray("images").getJSONObject(0);
+            JSONObject arrayOfImages = jsonData.getJSONArray("images").getJSONObject(0);
             String urlbase = bingUrl + arrayOfImages.getString("urlbase");
 
             imageAddress = new URL(urlbase + "_" + "1920x1080" + ".jpg");
@@ -52,18 +44,26 @@ class BingJsonProcessor implements JsonProcessor {
         return imageAddress;
     }
 
-    /**
-     * Attempts to download the JSON data from bing.com servers.
-     *
-     * @param _jsonAddress Contains JSON file's URL address.
-     * @return JSON file's data.
-     */
-    private JSONObject getJsonData(@NotNull final URL _jsonAddress) {
+
+    public String getImageDescription() {
+        // TODO: Get image desc impl
+        return "";
+    }
+
+
+    public String getImageLegalInfo() {
+        // TODO: Get image copyright impl
+        return "";
+    }
+
+
+    private JSONObject getJsonData() {
+        URL jsonAddress = getJsonAddress();
         BufferedReader bufferedReader;
         StringBuilder jsonData = new StringBuilder();
 
         try {
-            bufferedReader = new BufferedReader(new InputStreamReader(_jsonAddress.openStream(), "utf-8"));
+            bufferedReader = new BufferedReader(new InputStreamReader(jsonAddress.openStream(), "utf-8"));
 
             String line;
             while ((line = bufferedReader.readLine()) != null) {
@@ -77,11 +77,7 @@ class BingJsonProcessor implements JsonProcessor {
         return new JSONObject(jsonData.toString());
     }
 
-    /**
-     * Composes a URL address pointing to the JSON file.
-     *
-     * @return URL address to the JSON file.
-     */
+
     private URL getJsonAddress() {
         final String baseUrl = "http://www.bing.com/HPImageArchive.aspx?format=js&n=1";
         URL jsonUrl = null;

@@ -1,4 +1,4 @@
-package me.gmur.bingImageDownloader;
+package me.gmur.bingImageDownloader.wallpaperSetter;
 
 /**
  * Tries to recognize the end user's operating system family

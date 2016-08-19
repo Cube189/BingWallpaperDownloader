@@ -1,4 +1,4 @@
-package me.gmur.bingImageDownloader;
+package me.gmur.bingImageDownloader.imageDownloader;
 
 import java.io.*;
 import java.net.URL;
@@ -12,7 +12,7 @@ import java.net.URL;
  * @see ImageDownloader
  */
 public final class BingImageDownloader implements ImageDownloader {
-    private final String imagePath = "bingimage.jpg";
+    private final String imagePath = System.getProperty("user.home") + "/bingimage.jpg";
     private URL imageAddress;
 
     private BingImageDownloader() {

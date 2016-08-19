@@ -1,4 +1,4 @@
-package me.gmur.bingImageDownloader;
+package me.gmur.bingImageDownloader.imageDownloader;
 
 import com.sun.istack.internal.NotNull;
 
