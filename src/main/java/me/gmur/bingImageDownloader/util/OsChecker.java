@@ -1,6 +1,7 @@
 package me.gmur.bingImageDownloader.util;
 
 import me.gmur.bingImageDownloader.wallpaperSetter.WallpaperSetter;
+import org.apache.log4j.Logger;
 
 /**
  * Tries to recognize the end user's operating system family
@@ -9,7 +10,8 @@ import me.gmur.bingImageDownloader.wallpaperSetter.WallpaperSetter;
  * @see WallpaperSetter#chooseWallpaperSettingLogic()
  */
 public final class OsChecker {
-    private static OsChecker instance = new OsChecker();
+    private static final Logger LOG = Log.getLoggerForClass("OsChecker");
+    private static final OsChecker INSTANCE = new OsChecker();
     private String osName;
 
     private OsChecker() {
@@ -24,7 +26,7 @@ public final class OsChecker {
      * @return <code>OsChecker</code> instance.
      */
     public static OsChecker getInstance() {
-        return instance;
+        return INSTANCE;
     }
 
     /**
@@ -36,7 +38,7 @@ public final class OsChecker {
     public OsType determineOsType() {
         osName = System.getProperty("os.name");
 
-        System.out.println("INFO: OS running recognized as " + osName);
+        LOG.info("OS running recognized as " + osName);
 
         if (isWindows()) {
             return OsType.WINDOWS;
@@ -47,20 +49,10 @@ public final class OsChecker {
         }
     }
 
-    /**
-     * Checks if OS name indicates a Windows-family OS.
-     *
-     * @return Boolean value stating whether the OS is Windows-type.
-     */
     private boolean isWindows() {
         return osName.contains("Windows");
     }
 
-    /**
-     * Checks if OS name indicates a OS X-family OS.
-     *
-     * @return Boolean value stating whether the OS is OS X-type.
-     */
     private boolean isMac() {
         return osName.contains("Mac");
     }

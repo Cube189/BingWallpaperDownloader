@@ -1,10 +1,13 @@
 package me.gmur.bingImageDownloader.imageDownloader;
 
 import me.gmur.bingImageDownloader.util.Flags;
+import me.gmur.bingImageDownloader.util.Log;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * <code>ImageSaver</code> is a utility class which
@@ -12,7 +15,8 @@ import java.io.IOException;
  * and writing the downloaded image's data to it.
  */
 final class ImageSaver {
-    private static final String filename = Flags.IMAGE_FILE_LOCATION;
+    private static final String FILENAME = Flags.IMAGE_FILE_LOCATION;
+    private static final Logger LOG = Log.getLoggerForClass("ImageSaver");
 
     private ImageSaver() {
     }
@@ -21,24 +25,25 @@ final class ImageSaver {
      * Writes the image file's downloaded content to a local file.
      *
      * @param _imageData Downloaded content of the image file.
+     * @return File which contains the image
      */
     public static File saveImageAndGetFile(final byte[] _imageData) {
         FileOutputStream writer = null;
 
         try {
             try {
-                System.err.println("INFO: Writing image content to \'" + filename + "\'...");
+                LOG.info("Writing image content to: " + FILENAME);
 
-                writer = new FileOutputStream(filename);
+                writer = new FileOutputStream(FILENAME);
                 writer.write(_imageData);
             } finally {
                 assert writer != null;
                 writer.close();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Saving file failed with an error " + Arrays.toString(e.getStackTrace()));
         }
 
-        return new File(filename);
+        return new File(FILENAME);
     }
 }

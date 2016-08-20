@@ -1,9 +1,11 @@
 package me.gmur.bingImageDownloader.imageDownloader;
 
-import me.gmur.bingImageDownloader.util.Flags;
+import me.gmur.bingImageDownloader.util.Log;
+import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.net.URL;
+import java.util.Arrays;
 
 /**
  * <code>BingImageDownloader</code> is responsible
@@ -14,7 +16,7 @@ import java.net.URL;
  * @see ImageDownloader
  */
 public final class BingImageDownloader implements ImageDownloader {
-    private final String imagePath = Flags.IMAGE_FILE_LOCATION;
+    private static final Logger LOG = Log.getLoggerForClass("BingImageDownloader");
     private URL imageAddress;
 
     /**
@@ -37,27 +39,32 @@ public final class BingImageDownloader implements ImageDownloader {
     private byte[] fetchImageData() {
         byte[] imageContents = null;
 
-        InputStream input;
-        ByteArrayOutputStream output;
-        byte[] buffer = new byte[1024];
+        InputStream input = null;
+        ByteArrayOutputStream output = null;
+
+        int bufferSize = 1024;
+        byte[] buffer = new byte[bufferSize];
 
         try {
-            System.err.println("INFO: Getting image data from \'" + imageAddress.toString() + "\'...");
+            try {
+                LOG.info("Getting image data from \'" + imageAddress.toString() + "\'...");
 
-            input = new BufferedInputStream(imageAddress.openStream());
-            output = new ByteArrayOutputStream();
+                input = new BufferedInputStream(imageAddress.openStream());
+                output = new ByteArrayOutputStream();
 
-            int n;
-            while (-1 != (n = input.read(buffer))) {
-                output.write(buffer, 0, n);
+                int inputLength;
+                while ((inputLength = input.read(buffer)) != -1) {
+                    output.write(buffer, 0, inputLength);
+                }
+
+                imageContents = output.toByteArray();
+            } finally {
+                assert output != null;
+                output.close();
+                input.close();
             }
-
-            output.close();
-            input.close();
-
-            imageContents = output.toByteArray();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Fetching image data failed with an error " + Arrays.toString(e.getStackTrace()));
         }
 
         return imageContents;

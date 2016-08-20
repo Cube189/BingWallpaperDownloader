@@ -1,5 +1,7 @@
 package me.gmur.bingImageDownloader.imageDownloader;
 
+import me.gmur.bingImageDownloader.util.Log;
+import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -7,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 
 /**
  * <code>BingJsonProcessor</code> is responsible for parsing a JSON file
@@ -15,13 +18,12 @@ import java.net.URL;
  * @see JsonProcessor
  */
 class BingJsonProcessor implements JsonProcessor {
-    private JSONObject jsonData;
+    private static final Logger LOG = Log.getLoggerForClass("BingJsonProcessor");
+    private final JSONObject jsonData;
 
-
-    public BingJsonProcessor() {
+    BingJsonProcessor() {
         jsonData = getJsonData();
     }
-
 
     /**
      * Returns a URL to the image.
@@ -38,45 +40,31 @@ class BingJsonProcessor implements JsonProcessor {
 
             imageAddress = new URL(urlbase + "_" + "1920x1080" + ".jpg");
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            LOG.error("Creating URL object with image's address failed with an error " + Arrays.toString(e.getStackTrace()));
         }
 
         return imageAddress;
     }
 
-
-    public String getImageDescription() {
-        // TODO: Get image desc impl
-        return "";
-    }
-
-
-    public String getImageLegalInfo() {
-        // TODO: Get image copyright impl
-        return "";
-    }
-
-
     private JSONObject getJsonData() {
         URL jsonAddress = getJsonAddress();
         BufferedReader bufferedReader;
-        StringBuilder jsonData = new StringBuilder();
+        StringBuilder jsonDataString = new StringBuilder();
 
         try {
             bufferedReader = new BufferedReader(new InputStreamReader(jsonAddress.openStream(), "utf-8"));
 
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                jsonData.append(line);
+                jsonDataString.append(line);
             }
             bufferedReader.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Getting JSON file failed with an error " + Arrays.toString(e.getStackTrace()));
         }
 
-        return new JSONObject(jsonData.toString());
+        return new JSONObject(jsonDataString.toString());
     }
-
 
     private URL getJsonAddress() {
         final String baseUrl = "http://www.bing.com/HPImageArchive.aspx?format=js&n=1";
@@ -88,7 +76,7 @@ class BingJsonProcessor implements JsonProcessor {
                     + "&mkt=" + "en-US"
             );
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            LOG.error("Creating URL for JSON file failed with an error " + Arrays.toString(e.getStackTrace()));
         }
 
         return jsonUrl;

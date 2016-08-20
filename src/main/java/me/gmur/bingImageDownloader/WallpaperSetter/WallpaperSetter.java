@@ -1,17 +1,21 @@
 package me.gmur.bingImageDownloader.wallpaperSetter;
 
+import me.gmur.bingImageDownloader.util.Log;
 import me.gmur.bingImageDownloader.util.OsChecker;
 import me.gmur.bingImageDownloader.util.OsChecker.OsType;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * <code>WallpaperSetter</code> attempts to set the desktop background image
  * to the downloaded image.
  */
-public class WallpaperSetter {
-    private static WallpaperSetter instance = new WallpaperSetter();
+public final class WallpaperSetter {
+    private static final Logger LOG = Log.getLoggerForClass("WallpaperSetter");
+    private static final WallpaperSetter INSTANCE = new WallpaperSetter();
     private File wallpaperImage;
     private String[] script;
 
@@ -27,7 +31,7 @@ public class WallpaperSetter {
      * @return <code>WallpaperSetter</code> instance.
      */
     public static WallpaperSetter getInstance() {
-        return instance;
+        return INSTANCE;
     }
 
     /**
@@ -38,17 +42,20 @@ public class WallpaperSetter {
     public void setTo(final File _image) {
         wallpaperImage = _image;
 
-        System.out.println("INFO: Setting \'" + wallpaperImage.toString() + "\' as wallpaper...");
-        chooseWallpaperSettingLogic();
+        LOG.info("Setting " + wallpaperImage.toString() + " as wallpaper");
         setWallpaper();
     }
 
-    /**
-     * Chooses which type of logic to apply
-     * in order to set a desktop background image.
-     *
-     * @see OsChecker
-     */
+    private void setWallpaper() {
+        chooseWallpaperSettingLogic();
+
+        try {
+            Runtime.getRuntime().exec(script);
+        } catch (IOException e) {
+            LOG.error("Executing wallpaper-setting script failed with an error " + Arrays.toString(e.getStackTrace()));
+        }
+    }
+
     private void chooseWallpaperSettingLogic() {
         OsType osType = OsChecker.getInstance().determineOsType();
 
@@ -61,22 +68,6 @@ public class WallpaperSetter {
         }
     }
 
-    /**
-     * Executes the logic chosen by
-     * <code>{@link WallpaperSetter#chooseWallpaperSettingLogic()}</code>
-     */
-    private void setWallpaper() {
-        try {
-            Runtime.getRuntime().exec(script);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Applies logic needed to set a wallpaper image
-     * if the OS appears to be Windows.
-     */
     private void wallpaperSettingLogicForWindows() {
         // According to http://www.windows-commandline.com/change-windows-wallpaper-command-line/
         script = new String[]{
@@ -86,10 +77,6 @@ public class WallpaperSetter {
         };
     }
 
-    /**
-     * Applies logic needed to set a desktop background image
-     * if the OS appears to be OS X/macOS.
-     */
     private void wallpaperSettingLogicForMac() {
         // According to http://stackoverflow.com/a/22278487
         script = new String[]{
@@ -100,11 +87,6 @@ public class WallpaperSetter {
         };
     }
 
-    /**
-     * Applies logic needed to set a desktop background picture
-     * if the OS appears to be other than Windows or OS X/macOS
-     * (possibly a Linux distro).
-     */
     private void wallpaperSettingLogicForLinux() {
         // According to http://askubuntu.com/a/69500
         // This method currently works only on GNOME-based desktop environments
