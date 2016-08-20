@@ -1,6 +1,7 @@
 package me.gmur.bingImageDownloader.wallpaperSetter;
 
-import me.gmur.bingImageDownloader.wallpaperSetter.OsChecker.OsType;
+import me.gmur.bingImageDownloader.util.OsChecker;
+import me.gmur.bingImageDownloader.util.OsChecker.OsType;
 
 import java.io.File;
 import java.io.IOException;

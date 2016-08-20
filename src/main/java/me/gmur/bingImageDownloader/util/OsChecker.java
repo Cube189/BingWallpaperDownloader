@@ -1,4 +1,6 @@
-package me.gmur.bingImageDownloader.wallpaperSetter;
+package me.gmur.bingImageDownloader.util;
+
+import me.gmur.bingImageDownloader.wallpaperSetter.WallpaperSetter;
 
 /**
  * Tries to recognize the end user's operating system family
@@ -6,7 +8,7 @@ package me.gmur.bingImageDownloader.wallpaperSetter;
  *
  * @see WallpaperSetter#chooseWallpaperSettingLogic()
  */
-final class OsChecker {
+public final class OsChecker {
     private static OsChecker instance = new OsChecker();
     private String osName;
 

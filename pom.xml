@@ -6,7 +6,7 @@
 
     <groupId>me.gmur</groupId>
     <artifactId>BingImageDownloader</artifactId>
-    <version>0.5-SNAPSHOT</version>
+    <version>0.6-SNAPSHOT</version>
     <build>
         <plugins>
             <plugin>
@@ -26,6 +26,11 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20160212</version>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
         </dependency>
     </dependencies>
 

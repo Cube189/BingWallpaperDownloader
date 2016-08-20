@@ -1,11 +1,10 @@
 package me.gmur.bingImageDownloader.imageDownloader;
 
-import com.sun.istack.internal.NotNull;
+import me.gmur.bingImageDownloader.util.Flags;
 
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 /**
  * <code>ImageSaver</code> is a utility class which
@@ -13,38 +12,33 @@ import java.io.UnsupportedEncodingException;
  * and writing the downloaded image's data to it.
  */
 final class ImageSaver {
+    private static final String filename = Flags.IMAGE_FILE_LOCATION;
+
     private ImageSaver() {
     }
 
     /**
      * Writes the image file's downloaded content to a local file.
      *
-     * @param _imageContents Downloaded content of the image file.
-     * @param _filename      Name of the newly created image file.
+     * @param _imageData Downloaded content of the image file.
      */
-    public static void saveImageDataTo(final byte[] _imageContents, @NotNull final String _filename) {
+    public static File saveImageAndGetFile(final byte[] _imageData) {
         FileOutputStream writer = null;
 
         try {
-            System.err.println("INFO: Writing image content to \'" + _filename + "\'...");
+            try {
+                System.err.println("INFO: Writing image content to \'" + filename + "\'...");
 
-            writer = new FileOutputStream(_filename);
-            writer.write(_imageContents);
-
-            writer.close();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+                writer = new FileOutputStream(filename);
+                writer.write(_imageData);
+            } finally {
+                assert writer != null;
+                writer.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            if (writer != null)
-                try {
-                    writer.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
         }
+
+        return new File(filename);
     }
 }

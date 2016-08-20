@@ -1,5 +1,7 @@
 package me.gmur.bingImageDownloader.imageDownloader;
 
+import me.gmur.bingImageDownloader.util.Flags;
+
 import java.io.*;
 import java.net.URL;
 
@@ -12,20 +14,8 @@ import java.net.URL;
  * @see ImageDownloader
  */
 public final class BingImageDownloader implements ImageDownloader {
-    private final String imagePath = System.getProperty("user.home") + "/bingimage.jpg";
+    private final String imagePath = Flags.IMAGE_FILE_LOCATION;
     private URL imageAddress;
-
-    private BingImageDownloader() {
-    }
-
-    /**
-     * Creates new <code>BingImageDownloader</code> instance.
-     *
-     * @return New <code>BingImageDownloader</code> instance.
-     */
-    public static ImageDownloader createInstance() {
-        return new BingImageDownloader();
-    }
 
     /**
      * Fetches the Bing Image of The Day.
@@ -36,9 +26,7 @@ public final class BingImageDownloader implements ImageDownloader {
         imageAddress = new BingJsonProcessor().getImageAddress();
         byte[] imageData = fetchImageData();
 
-        ImageSaver.saveImageDataTo(imageData, imagePath);
-
-        return new File(imagePath);
+        return ImageSaver.saveImageAndGetFile(imageData);
     }
 
     /**
