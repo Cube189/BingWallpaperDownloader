@@ -14,7 +14,7 @@ import java.util.Arrays;
  * to the downloaded image.
  */
 public final class WallpaperSetter {
-    private static final Logger LOG = Log.getLoggerForClass("WallpaperSetter");
+    private static final Logger LOG = Log.getLoggerFor(WallpaperSetter.class);
     private static final WallpaperSetter INSTANCE = new WallpaperSetter();
     private File wallpaperImage;
     private String[] script;
@@ -42,7 +42,7 @@ public final class WallpaperSetter {
     public void setTo(final File _image) {
         wallpaperImage = _image;
 
-        LOG.info("Setting " + wallpaperImage.toString() + " as wallpaper");
+        LOG.info(String.format("Setting \'%s\' as wallpaper", wallpaperImage.toString()));
         setWallpaper();
     }
 
@@ -52,7 +52,7 @@ public final class WallpaperSetter {
         try {
             Runtime.getRuntime().exec(script);
         } catch (IOException e) {
-            LOG.error("Executing wallpaper-setting script failed with an error " + Arrays.toString(e.getStackTrace()));
+            LOG.error(String.format("Executing wallpaper-setting script failed with an error \'%s\'", Arrays.toString(e.getStackTrace())));
         }
     }
 
@@ -69,7 +69,6 @@ public final class WallpaperSetter {
     }
 
     private void wallpaperSettingLogicForWindows() {
-        // According to http://www.windows-commandline.com/change-windows-wallpaper-command-line/
         script = new String[]{
                 "reg",
                 "add \"HKEY_CURRENT_USER\\Control Panel\\Desktop\" /v Wallpaper /t REG_SZ /d" + wallpaperImage.getAbsolutePath() + "/f",
@@ -78,7 +77,6 @@ public final class WallpaperSetter {
     }
 
     private void wallpaperSettingLogicForMac() {
-        // According to http://stackoverflow.com/a/22278487
         script = new String[]{
                 "osascript",
                 "-e", "tell application \"Finder\"",
@@ -88,7 +86,6 @@ public final class WallpaperSetter {
     }
 
     private void wallpaperSettingLogicForLinux() {
-        // According to http://askubuntu.com/a/69500
         // This method currently works only on GNOME-based desktop environments
         script = new String[]{
                 "gsettings",

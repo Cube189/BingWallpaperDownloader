@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
  * @see WallpaperSetter#chooseWallpaperSettingLogic()
  */
 public final class OsChecker {
-    private static final Logger LOG = Log.getLoggerForClass("OsChecker");
+    private static final Logger LOG = Log.getLoggerFor(OsChecker.class);
     private static final OsChecker INSTANCE = new OsChecker();
     private String osName;
 
@@ -38,7 +38,7 @@ public final class OsChecker {
     public OsType determineOsType() {
         osName = System.getProperty("os.name");
 
-        LOG.info("OS running recognized as " + osName);
+        LOG.info(String.format("OS running recognized as \'%s\'", osName));
 
         if (isWindows()) {
             return OsType.WINDOWS;

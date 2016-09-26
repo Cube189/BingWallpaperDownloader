@@ -16,7 +16,7 @@ import java.util.Arrays;
  * @see ImageDownloader
  */
 public final class BingImageDownloader implements ImageDownloader {
-    private static final Logger LOG = Log.getLoggerForClass("BingImageDownloader");
+    private static final Logger LOG = Log.getLoggerFor(BingImageDownloader.class);
     private URL imageAddress;
 
     /**
@@ -47,7 +47,7 @@ public final class BingImageDownloader implements ImageDownloader {
 
         try {
             try {
-                LOG.info("Getting image data from \'" + imageAddress.toString() + "\'...");
+                LOG.info(String.format("Getting image data from \'%s\'...", imageAddress.toString()));
 
                 input = new BufferedInputStream(imageAddress.openStream());
                 output = new ByteArrayOutputStream();
@@ -64,7 +64,7 @@ public final class BingImageDownloader implements ImageDownloader {
                 input.close();
             }
         } catch (IOException e) {
-            LOG.error("Fetching image data failed with an error " + Arrays.toString(e.getStackTrace()));
+            LOG.error(String.format("Fetching image data failed with error \'%s\'", Arrays.toString(e.getStackTrace())));
         }
 
         return imageContents;

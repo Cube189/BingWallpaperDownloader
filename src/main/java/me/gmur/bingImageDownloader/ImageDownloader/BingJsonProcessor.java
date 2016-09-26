@@ -18,7 +18,7 @@ import java.util.Arrays;
  * @see JsonProcessor
  */
 class BingJsonProcessor implements JsonProcessor {
-    private static final Logger LOG = Log.getLoggerForClass("BingJsonProcessor");
+    private static final Logger LOG = Log.getLoggerFor(BingJsonProcessor.class);
     private final JSONObject jsonData;
 
     BingJsonProcessor() {
@@ -40,7 +40,7 @@ class BingJsonProcessor implements JsonProcessor {
 
             imageAddress = new URL(urlbase + "_" + "1920x1080" + ".jpg");
         } catch (MalformedURLException e) {
-            LOG.error("Creating URL object with image's address failed with an error " + Arrays.toString(e.getStackTrace()));
+            LOG.error(String.format("Creating URL object with image\'s address failed with an error \'%s\'", Arrays.toString(e.getStackTrace())));
         }
 
         return imageAddress;
@@ -60,23 +60,20 @@ class BingJsonProcessor implements JsonProcessor {
             }
             bufferedReader.close();
         } catch (IOException e) {
-            LOG.error("Getting JSON file failed with an error " + Arrays.toString(e.getStackTrace()));
+            LOG.error(String.format("Getting JSON file failed with an error \'%s\'", Arrays.toString(e.getStackTrace())));
         }
 
         return new JSONObject(jsonDataString.toString());
     }
 
     private URL getJsonAddress() {
-        final String baseUrl = "http://www.bing.com/HPImageArchive.aspx?format=js&n=1";
+        final String baseUrl = "http://www.bing.com/HPImageArchive.aspx?format=js&n=1&idx=%d&mkt=%s";
         URL jsonUrl = null;
 
         try {
-            jsonUrl = new URL(baseUrl
-                    + "&idx=" + "0"
-                    + "&mkt=" + "en-US"
-            );
+            jsonUrl = new URL(String.format(baseUrl, 0, "en-US"));
         } catch (MalformedURLException e) {
-            LOG.error("Creating URL for JSON file failed with an error " + Arrays.toString(e.getStackTrace()));
+            LOG.error(String.format("Creating URL for JSON file failed with an error \'%s\'", Arrays.toString(e.getStackTrace())));
         }
 
         return jsonUrl;

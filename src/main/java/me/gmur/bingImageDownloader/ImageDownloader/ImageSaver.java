@@ -16,7 +16,7 @@ import java.util.Arrays;
  */
 final class ImageSaver {
     private static final String FILENAME = Flags.IMAGE_FILE_LOCATION;
-    private static final Logger LOG = Log.getLoggerForClass("ImageSaver");
+    private static final Logger LOG = Log.getLoggerFor(ImageSaver.class);
 
     private ImageSaver() {
     }
@@ -32,7 +32,7 @@ final class ImageSaver {
 
         try {
             try {
-                LOG.info("Writing image content to: " + FILENAME);
+                LOG.info(String.format("Writing image data to \'%s\'", FILENAME));
 
                 writer = new FileOutputStream(FILENAME);
                 writer.write(_imageData);
@@ -41,7 +41,7 @@ final class ImageSaver {
                 writer.close();
             }
         } catch (IOException e) {
-            LOG.error("Saving file failed with an error " + Arrays.toString(e.getStackTrace()));
+            LOG.error(String.format("Saving file failed with an error \'%s\'", Arrays.toString(e.getStackTrace())));
         }
 
         return new File(FILENAME);
