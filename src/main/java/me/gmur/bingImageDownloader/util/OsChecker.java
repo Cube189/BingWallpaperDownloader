@@ -31,7 +31,7 @@ public final class OsChecker {
 
     /**
      * Recognizes the operating system family
-     * and returns a corresponding value.
+     * and returns a corresponding value of <code>OsType</code> enum.
      *
      * @return OS family name.
      */

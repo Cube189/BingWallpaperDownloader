@@ -47,21 +47,22 @@ public final class BingImageDownloader implements ImageDownloader {
 
         try {
             try {
-                LOG.info(String.format("Getting image data from \'%s\'...", imageAddress.toString()));
+                LOG.info(String.format("Getting image data from \'%s\'", imageAddress.toString()));
 
                 input = new BufferedInputStream(imageAddress.openStream());
                 output = new ByteArrayOutputStream();
 
-                int inputLength;
-                while ((inputLength = input.read(buffer)) != -1) {
-                    output.write(buffer, 0, inputLength);
+                int inputBufferSize;
+                while ((inputBufferSize = input.read(buffer)) != -1) {
+                    output.write(buffer, 0, inputBufferSize);
                 }
 
                 imageContents = output.toByteArray();
             } finally {
-                assert output != null;
-                output.close();
-                input.close();
+                if (output != null)
+                    output.close();
+                if (input != null)
+                    input.close();
             }
         } catch (IOException e) {
             LOG.error(String.format("Fetching image data failed with error \'%s\'", Arrays.toString(e.getStackTrace())));

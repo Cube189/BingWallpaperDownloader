@@ -1,6 +1,6 @@
 package me.gmur.bingImageDownloader.imageDownloader;
 
-import me.gmur.bingImageDownloader.util.Flags;
+import me.gmur.bingImageDownloader.util.Config;
 import me.gmur.bingImageDownloader.util.Log;
 import org.apache.log4j.Logger;
 
@@ -15,7 +15,7 @@ import java.util.Arrays;
  * and writing the downloaded image's data to it.
  */
 final class ImageSaver {
-    private static final String FILENAME = Flags.IMAGE_FILE_LOCATION;
+    private static final String FILENAME = Config.IMAGE_FILE_LOCATION;
     private static final Logger LOG = Log.getLoggerFor(ImageSaver.class);
 
     private ImageSaver() {
@@ -37,8 +37,8 @@ final class ImageSaver {
                 writer = new FileOutputStream(FILENAME);
                 writer.write(_imageData);
             } finally {
-                assert writer != null;
-                writer.close();
+                if (writer != null)
+                    writer.close();
             }
         } catch (IOException e) {
             LOG.error(String.format("Saving file failed with an error \'%s\'", Arrays.toString(e.getStackTrace())));
